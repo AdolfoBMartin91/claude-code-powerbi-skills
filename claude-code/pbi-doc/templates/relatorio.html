@@ -83,7 +83,7 @@ body::before {
   z-index: 100;
 }
 .sidebar-brand {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
   height: var(--topbar-h);
   padding: 0 24px;
   font-family: var(--font-condensed); font-size: 13px; font-weight: 700;
@@ -93,8 +93,9 @@ body::before {
 }
 .sidebar-logo {
   display: block;
-  max-height: 28px;
+  max-height: 42px;
   width: auto;
+  margin: 0 auto;
 }
 .sidebar-brand .dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -156,7 +157,7 @@ section {
   margin: 64px 0;
 }
 .section-eyebrow { font-family: var(--font-condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-.section-title { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 42px); line-height: 1.05; letter-spacing: 0.04em; color: var(--text-white); margin-bottom: 14px; text-transform: uppercase; }
+.section-title { font-family: var(--font-display); font-size: clamp(18px, 2.4vw, 24px); line-height: 1.1; letter-spacing: 0.04em; color: var(--text-white); margin-bottom: 14px; text-transform: uppercase; }
 .section-title .gold { background:var(--gradient-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .section-desc { font-family: var(--font-body); font-size: 16px; color: var(--text-secondary); line-height: 1.7; max-width: 64ch; margin-bottom: 36px; }
 .section-desc strong { color: var(--text-white); font-weight: 600; }
@@ -164,7 +165,7 @@ section {
 /* ── Hero ── */
 .hero-block { padding: 36px 0 0; }
 .hero-eyebrow { font-family: var(--font-condensed); font-size: 12px; font-weight: 300; letter-spacing: 0.5em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 18px; }
-.hero-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-white); line-height: 1.05; margin-bottom: 8px; word-break: break-word; }
+.hero-title { font-family: var(--font-display); font-size: clamp(20px, 3vw, 26px); font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-white); line-height: 1.1; margin-bottom: 8px; word-break: break-word; }
 .hero-sub { font-family: var(--font-condensed); font-size: clamp(14px, 1.6vw, 18px); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background:var(--gradient-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom: 28px; }
 .hero-tagline { font-family: var(--font-body); font-style: italic; font-size: 17px; color: var(--text-secondary); max-width: 60ch; line-height: 1.6; }
 
@@ -216,7 +217,7 @@ section {
   padding: 20px 24px; border-bottom: 1px solid var(--border-faint);
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
 }
-.table-card-name { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--accent-glow); }
+.table-card-name { font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--accent-glow); }
 .table-card-meta { font-family: var(--font-body); font-size: 13px; color: var(--text-muted); }
 .table-card-body { padding: 20px 24px; }
 .table-card-body p { margin-bottom: 14px; color: var(--text-primary); font-size: 14px; line-height: 1.65; }
@@ -249,7 +250,7 @@ pre.code .c { color: var(--text-muted); font-style: italic; }
 /* ── Measure group ── */
 .measure-group { margin-bottom: 36px; }
 .measure-group-title {
-  font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em;
+  font-family: var(--font-display); font-size: 18px; letter-spacing: 0.04em;
   text-transform: uppercase; color: var(--text-white); margin-bottom: 6px;
 }
 .measure-group-meta { font-family: var(--font-body); font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
@@ -259,7 +260,7 @@ pre.code .c { color: var(--text-muted); font-style: italic; }
   border-radius: 12px; box-shadow: var(--shadow-card);
   margin-bottom: 16px; padding: 20px 24px;
 }
-.measure-name { font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--accent-blue); margin-bottom: 4px; }
+.measure-name { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--accent-blue); margin-bottom: 4px; }
 .measure-meta { font-family: var(--font-body); font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
 .measure-meta code { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-secondary); }
 .measure-card .desc { font-size: 14px; color: var(--text-primary); margin-bottom: 14px; }
@@ -284,7 +285,7 @@ details.measure-mini summary {
 }
 details.measure-mini summary::-webkit-details-marker { display: none; }
 details.measure-mini summary::marker { content: ""; }
-details.measure-mini summary .name { font-family: var(--font-mono); font-size: 13px; color: var(--accent-gold-bright); font-weight: 500; }
+details.measure-mini summary .name { font-family: var(--font-mono); font-size: 14px; color: var(--accent-gold-bright); font-weight: 500; }
 details.measure-mini summary .dax { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 360px; }
 details.measure-mini summary .toggle { font-family: var(--font-condensed); font-size: 22px; font-weight: 300; color: var(--text-muted); transition: transform 0.25s; line-height: 1; text-align: center; }
 details.measure-mini[open] summary .toggle { transform: rotate(45deg); color: var(--accent-glow); }
@@ -829,13 +830,15 @@ body::before { animation: ambientBreathe 12s ease-in-out infinite; }
   const search = document.getElementById('search');
   const tableCards = document.querySelectorAll('.table-card');
   const measureCards = document.querySelectorAll('.measure-card, .measure-mini');
-  search.addEventListener('input', () => {
-    const q = search.value.trim().toLowerCase();
-    [...tableCards, ...measureCards].forEach(card => {
-      const text = card.textContent.toLowerCase();
-      card.style.display = (q === '' || text.includes(q)) ? '' : 'none';
+  if (search) {
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      [...tableCards, ...measureCards].forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = (q === '' || text.includes(q)) ? '' : 'none';
+      });
     });
-  });
+  }
 
   // ── Particle field · pontos dourado/azul flutuando ──
   (function initParticles(){
