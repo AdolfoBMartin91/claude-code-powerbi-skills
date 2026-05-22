@@ -125,6 +125,10 @@ Ler templates em `templates/` e preencher com dados reais. Salvar em `./_docs/` 
 
 2. **SUBSTITUIR APENAS os placeholders `{{...}}`** pelos valores reais derivados dos `.tmdl`. Lista completa dos placeholders está em `references/escopo.md` desta skill (seção "Placeholders do `templates/relatorio.html`"). Todos os blocos `{{...}}_HTML` são gerados pelo Claude com base no inventário do modelo.
 
+   - Blocos `*_HTML` precisam ser HTML estrutural valido conforme os shapes em `references/escopo.md`: menu com anchors `#tbl-*`/`#grp-*`, badges `<span class="badge-inline ...">`, cards de tabela com `<article class="table-card reveal r-d...">`, colunas dentro de `<table class="col-table">` e Source M dentro de `<pre class="code">`.
+   - **Nunca** inserir Markdown cru dentro desses placeholders (tabelas `| ... |`, fences ``` ou linhas concatenadas como `pessoa_idstring`). Esse erro faz a pagina renderizar texto solto e quebra o frame visual.
+   - Escapar texto vindo do modelo em HTML (`&`, `<`, `>`, `"`) antes de inserir em atributos, celulas e blocos de codigo.
+
 3. **PROIBIDO:**
    - ❌ Trocar o CSS por outro
    - ❌ Inventar nova paleta de cores (usar SÓ os tokens do template: `--accent-gold-bright #E8C9A0`, `--accent-glow #7099FF`, `--neon-magenta #C47FFF`, etc.)

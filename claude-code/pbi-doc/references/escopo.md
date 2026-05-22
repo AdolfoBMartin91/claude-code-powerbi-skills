@@ -245,12 +245,79 @@ O template HTML usa estes placeholders `{{...}}` que devem ser substituídos com
 | `{{DEP_REVERSE_HTML}}` | Cards reverse das medidas-base |
 | `{{TOP_TABLES_LIST_HTML}}` | Items `<li>` com tabelas mais referenciadas |
 
+### Regras obrigatorias para blocos `*_HTML`
+
+Os placeholders terminados em `_HTML` devem receber **HTML valido**, nunca Markdown renderizado ou texto solto. Nao usar tabelas Markdown (`| Coluna | Tipo |`), listas sem tags, fences ``` ou pares `nome` + `tipo` concatenados. Todo texto vindo do modelo deve ser escapado para HTML (`&`, `<`, `>`, `"`) antes de entrar em atributos, tabelas ou blocos de codigo.
+
+#### Shape de `{{NAV_TABLES_HTML}}`
+
+Cada item do menu de tabelas deve apontar para o mesmo `id` do card (`tbl-...`) e usar `badge-inline`, igual ao HTML validado. O badge nao pode virar texto cru depois do nome sem `<span>`, senao o menu perde o visual.
+
+```html
+<a href="#tbl-dim-pessoas">dim_pessoas <span class="badge-inline dim">Dimensao</span></a>
+```
+
+Classes validas para o badge: `fato`, `dim`, `med`, `aux`. Slugs devem ser ASCII, minusculos e estaveis: `dim_pessoas` -> `tbl-dim-pessoas`, `fact_venda_itens` -> `tbl-fact-venda-itens`, `aux_Tipo_Pagamento` -> `tbl-aux-tipo-pagamento`.
+
+#### Shape de `{{NAV_MEASURES_HTML}}`
+
+```html
+<a href="#grp-0-geral">0. Geral <span class="count">20</span></a>
+```
+
+Slugs de pastas de medidas seguem o mesmo padrao: `0. Geral` -> `grp-0-geral`, `2. Ass. Administrativo` -> `grp-2-ass-administrativo`.
+
+#### Shape de cada item em `{{TABLES_CARDS_HTML}}`
+
+Cada tabela precisa ser um `<article class="table-card reveal r-dN">` completo, com `id="tbl-..."` igual ao menu e `data-search` com nome + tipo. Nao gerar apenas titulo + linhas de texto como `pessoa_idstring`; as colunas sempre entram em `<table class="col-table">`.
+
+```html
+<article class="table-card reveal r-d2" id="tbl-dim-pessoas" data-search="dim_pessoas Dimensao">
+  <div class="table-card-head">
+    <div class="table-card-name">dim_pessoas</div>
+    <div class="table-card-meta">Dimensao · 12 colunas · 0 medidas · Tabela calculada/manual</div>
+  </div>
+  <div class="table-card-body">
+    <p>dim_pessoas descreve entidades usadas para filtrar e segmentar as fatos.</p>
+    <div class="label">Granularidade</div>
+    <p>1 linha por entidade de referencia usada como filtro no modelo.</p>
+    <div class="label">Colunas</div>
+    <table class="col-table">
+      <thead><tr><th>Coluna</th><th>Tipo</th><th>Papel</th><th>Notas</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="col-name">pessoa_id</td>
+          <td class="col-type">string</td>
+          <td class="col-papel">Chave primaria</td>
+          <td class="col-notas">-</td>
+        </tr>
+      </tbody>
+    </table>
+    <details class="source-m">
+      <summary>Source M resumido</summary>
+      <pre class="code">mode: import
+source =
+  let
+    Fonte = ...
+  in
+    dim_pessoas_Table</pre>
+    </details>
+  </div>
+</article>
+```
+
+Se nao houver Source M, omitir o `<details class="source-m">` inteiro. Se houver M, inserir o codigo em `<pre class="code">` com HTML escapado; nunca usar `<code>` sem `<pre>` para o source.
+
 ### Padrão de cada `<details class="measure-mini">`
 
 Todas as medidas seguem este shape — medidas-âncora têm classe `.anchor` + atributo `open`:
 
 ```html
-<details class="measure-mini [anchor]" [open]>
+<div class="measure-group reveal" id="grp-0-geral">
+  <h3 class="measure-group-title">0. Geral</h3>
+  <p class="measure-group-meta">20 medidas nesta pasta</p>
+
+<details class="measure-mini anchor reveal r-d1" open data-search="$ Total Geral 0. Geral [$ Total a Pagar FGA] + [$ Total a Pagar Ass. Administrativo]">
   <summary>
     <span class="name">{Nome}</span>
     <span class="dax">{DAX-essência em 1 linha}</span>
@@ -266,7 +333,10 @@ Todas as medidas seguem este shape — medidas-âncora têm classe `.anchor` + a
     <p class="measure-deps"><code>{outra-medida-1}</code> · <code>{outra-medida-2}</code></p>
   </div>
 </details>
+</div>
 ```
+
+O `data-search` deve conter nome, pasta e DAX em texto escapado para a busca funcionar. O DAX completo dentro de `<pre class="code">` tambem deve estar escapado (`<` vira `&lt;`, `>` vira `&gt;`, `&` vira `&amp;`).
 
 ### Excluir tabelas auto-date
 
