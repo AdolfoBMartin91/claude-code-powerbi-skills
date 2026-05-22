@@ -97,8 +97,8 @@ Se mudar tokens aqui sem mudar no template, fica inconsistente — sempre altera
 
 ### Escala (fluida, mas não tão agressiva quanto slide)
 - `score-num`: `clamp(7rem, 14vw, 12rem)`
-- `hero-headline`: `clamp(40px, 6vw, 72px)`
-- `section-title`: `clamp(36px, 5vw, 56px)`
+- `hero-headline`: `clamp(22px, 5vw, 26px)`
+- `section-title`: `clamp(22px, 4vw, 24px)`
 - `sev-num`: `72px` fixo
 - body padrão: `16px`
 - labels uppercase: `11–13px`

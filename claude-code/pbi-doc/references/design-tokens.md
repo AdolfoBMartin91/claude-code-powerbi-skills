@@ -97,9 +97,11 @@ Mesmo conjunto de tokens da `/pbi-modelo-review` — vibe DWAY v1 unificada nas 
 ```
 
 ### Escala
-- `hero-headline`: `clamp(32px, 4vw, 48px)` (menor que /pbi-modelo-review — doc não tem scorecard hero)
-- `section-title`: `clamp(28px, 3.5vw, 42px)`
-- `card-title` (tabela/medida): `20px` fixo
+- `hero-title`: `clamp(20px, 3vw, 26px)`
+- `section-title`: `clamp(18px, 2.4vw, 24px)`
+- `table-card-name`: `15px` fixo, Montserrat
+- `measure-group-title`: `18px` fixo
+- `measure-name` / `details.measure-mini summary .name`: `14px` fixo
 - `code` (DAX/path): `13px` mono
 - body padrão: `15px`
 - sidebar nav: `13px`
