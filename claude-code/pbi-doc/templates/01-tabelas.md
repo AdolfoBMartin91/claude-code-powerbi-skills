@@ -54,4 +54,4 @@ Catálogo de tabelas do modelo. Cada uma com descrição, granularidade, colunas
 
 ---
 
-*XPERIUN · `/pbi-doc`*
+*DWAY · `/pbi-doc`*

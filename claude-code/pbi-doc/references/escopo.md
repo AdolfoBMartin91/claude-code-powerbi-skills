@@ -195,7 +195,7 @@ Top 5 tabelas mais usadas em medidas (sinaliza onde mora a "carne" do modelo).
 
 ## Regras transversais
 
-**Tom**: PT-BR direto, sem jargão desnecessário, com personalidade Xperiun (provocativo quando faz sentido, mas em doc é mais sóbrio que em /pbi-modelo-review).
+**Tom**: PT-BR direto, sem jargão desnecessário, com personalidade DWAY (provocativo quando faz sentido, mas em doc é mais sóbrio que em /pbi-modelo-review).
 
 **Acentuação**: SEMPRE com todos os acentos (regra inviolável CLAUDE.md).
 

@@ -67,4 +67,4 @@
 
 ---
 
-*XPERIUN · O Sistema Operacional dos Incomparáveis · `/pbi-doc`*
+*DWAY · Data Wrangling and Analysis for You · `/pbi-doc`*

@@ -79,4 +79,4 @@ Sinaliza onde mora a "carne" do modelo — tabelas usadas por mais medidas têm 
 
 ---
 
-*XPERIUN · `/pbi-doc`*
+*DWAY · `/pbi-doc`*
