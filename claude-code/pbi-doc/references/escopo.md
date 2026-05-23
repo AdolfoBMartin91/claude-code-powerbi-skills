@@ -88,6 +88,17 @@ in #"...":
 
 **Estrutura**: agrupar por **displayFolder** (que existe no TMDL). Se medida não tem displayFolder, agrupar em "Sem pasta".
 
+**Parsing seguro de `displayFolder`**: ler somente o valor da própria linha `displayFolder:`. Nunca usar regex `DOTALL`, `Singleline` ou equivalente para propriedades simples (`displayFolder`, `formatString`, `description`, `lineageTag`, `annotation`), porque isso captura linhas seguintes e contamina a pasta com metadados.
+
+```python
+def prop_line(block: str, key: str, default: str = "") -> str:
+    pattern = r"^\s*" + re.escape(key) + r":[ \t]*([^\r\n]+)"
+    match = re.search(pattern, block, re.MULTILINE)
+    return match.group(1).strip() if match else default
+```
+
+Campos proibidos em título de pasta, sidebar, nome de grupo, texto explicativo e `data-search`: `lineageTag`, `annotation`, `annotation PBI_FormatHint`, `PBI_FormatHint`.
+
 **Conteúdo (por medida)**:
 
 ```markdown
@@ -113,6 +124,8 @@ in #"...":
 **Ordem dentro de cada displayFolder**: alfabética.
 
 **Tom**: explicação em PT deve ser **didática mas não condescendente**. Pra analista que sabe DAX, mas pode não conhecer o modelo específico.
+
+**Validação obrigatória**: depois de gerar `02-medidas.md` e `index.html`, confirmar que as pastas de medidas refletem apenas `displayFolder`. Para o modelo "Relatório de Comissões", as pastas esperadas são `0. Geral`, `1. FGA`, `2. Ass. Administrativo` e `3. Sucesso do Cliente`.
 
 ---
 
@@ -199,6 +212,8 @@ Top 5 tabelas mais usadas em medidas (sinaliza onde mora a "carne" do modelo).
 
 **Acentuação**: SEMPRE com todos os acentos (regra inviolável CLAUDE.md).
 
+**Nunca usar `?` como substituto de acento**: textos gerados em PT-BR precisam sair em UTF-8 real. Corrigir qualquer ocorrência suspeita em textos de medidas, `O que faz`, `Como funciona`, `É usada por`, títulos, labels, navegação, markdowns e HTML final. Palavras sensíveis: `relatório`, `expressão`, `Referências`, `proporção`, `divisão`, `clínica`, `período`, `variação`, `dinâmico`, `premiação`, `confirmação`, `bonificação`, `aplicável`, `numérica`, `intermediária`, `explícitos`, `função`, `alteração`, `É usada por`. Separadores corretos: `·` e `—`, nunca `?`.
+
 **Excluir auto-date**: tabelas `LocalDateTable_*` e `DateTableTemplate_*` **não entram** em nenhum dos 5 arquivos. Se modelo tem essas tabelas, mencionar **só** no overview ("o modelo tem Auto Date/Time ligado, gerando 2 tabelas-fantasma ocultas — para auditar isso, rode `/pbi-modelo-review`").
 
 **Linkar entre arquivos**: usar links markdown relativos. Ex: em `02-medidas.md`, ao mencionar uma tabela, linkar pra `01-tabelas.md#nome-tabela`.
@@ -266,6 +281,8 @@ Classes validas para o badge: `fato`, `dim`, `med`, `aux`. Slugs devem ser ASCII
 ```
 
 Slugs de pastas de medidas seguem o mesmo padrao: `0. Geral` -> `grp-0-geral`, `2. Ass. Administrativo` -> `grp-2-ass-administrativo`.
+
+O texto do link deve vir somente do `displayFolder` capturado em uma linha. Não pode conter `lineageTag`, `annotation`, `annotation PBI_FormatHint` ou `PBI_FormatHint`.
 
 #### Shape de cada item em `{{TABLES_CARDS_HTML}}`
 
@@ -336,7 +353,36 @@ Todas as medidas seguem este shape — medidas-âncora têm classe `.anchor` + a
 </div>
 ```
 
-O `data-search` deve conter nome, pasta e DAX em texto escapado para a busca funcionar. O DAX completo dentro de `<pre class="code">` tambem deve estar escapado (`<` vira `&lt;`, `>` vira `&gt;`, `&` vira `&amp;`).
+O título `.measure-group-title`, a navegação e o `data-search` devem conter somente o nome limpo da pasta. O `data-search` deve conter nome, pasta e DAX em texto escapado para a busca funcionar, sem metadados TMDL como `lineageTag` ou `annotation`. O DAX completo dentro de `<pre class="code">` tambem deve estar escapado (`<` vira `&lt;`, `>` vira `&gt;`, `&` vira `&amp;`).
+
+### Validação obrigatória do HTML final
+
+Antes de finalizar `index.html`, validar:
+
+```python
+from pathlib import Path
+import re
+
+html = Path("PBIP/_docs/index.html").read_text(encoding="utf-8")
+html_without_pre = re.sub(r"<pre.*?</pre>", "", html, flags=re.S)
+
+assert "{{" not in html
+assert "pessoa_idstring" not in html
+assert "lineageTag" not in html_without_pre
+assert "annotation PBI_FormatHint" not in html_without_pre
+
+required = [
+    "gold-grid",
+    "section-orb",
+    "sidebar-logo",
+    "table-card",
+    "measure-mini",
+    "rel-svg",
+]
+
+for token in required:
+    assert token in html, token
+```
 
 ### Excluir tabelas auto-date
 

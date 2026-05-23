@@ -363,4 +363,4 @@ Valores válidos de `data-filter`:
 </details>
 ```
 
-Severidade escolhe a cor automática via classe: `critical` (magenta), `medium` (blue glow), `light` (gold).
+Severidade escolhe a cor automática via classe: `critical` (vermelho), `medium` (laranja), `light` (verde).

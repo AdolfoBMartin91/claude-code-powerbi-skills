@@ -13,9 +13,9 @@ Se mudar tokens aqui sem mudar no template, fica inconsistente — sempre altera
 - **Cor primária**: blue glow (`--accent-glow: #7099FF`) pra elementos informativos
 - **Cor de destaque**: gold/champagne (`--accent-gold-bright: #E8C9A0`) pra score, scores e CTAs
 - **Severidade adaptada ao DS**:
-  - Crítico → `--neon-magenta` (#C47FFF) — roxo violeta sutil (não vermelho agressivo)
-  - Médio → `--accent-glow` (#7099FF) — blue glow
-  - Leve → `--accent-gold-bright` (#E8C9A0) — gold sutil
+  - Crítico → `--severity-critical` (#FF4D5E) — vermelho
+  - Médio → `--severity-medium` (#FFB454) — laranja
+  - Leve → `--severity-light` (#54D48A) — verde
 - **Background**: orb gradient fixo (navy/indigo) com radial blue overlay
 - **Brackets**: elemento característico do v4 — usar nos cards principais
 - **Print**: vira light mode automático (preserva legibilidade no papel)
@@ -55,9 +55,16 @@ Se mudar tokens aqui sem mudar no template, fica inconsistente — sempre altera
 ### Neon secundários (severity)
 ```css
 --neon-cyan:    #4FE3E8;
---neon-magenta: #C47FFF;  /* SEVERIDADE CRÍTICA desta skill */
+--neon-magenta: #C47FFF;
 --neon-violet:  #7B6FFF;
 --neon-teal:    #3FD1B8;
+```
+
+### Severidade
+```css
+--severity-critical: #FF4D5E;  /* Crítico: vermelho */
+--severity-medium:   #FFB454;  /* Médio: laranja */
+--severity-light:    #54D48A;  /* Leve: verde */
 ```
 
 ### Texto
@@ -185,13 +192,13 @@ Texto gigante do score (0-100). Font condensed weight 300, color via `background
 Pill com label ("Bom" / "Precisa Atenção" / "Crítico"). Sempre gold (semântica neutra elegante).
 
 ### `.sev-card`
-Card de severidade (3 colunas). Variants `.critical`, `.medium`, `.light` mudam cor da `::before` line, do `.sev-num` e do `.sev-icon`.
+Card de severidade (3 colunas). Variants `.critical`, `.medium`, `.light` mudam cor da `::before` line, do `.sev-num` e do `.sev-icon`: crítico vermelho, médio laranja, leve verde.
 
 ### `.dist-bar`
 Barra empilhada horizontal (flex). Cada `<div>` tem `flex` proporcional ao count e gradient da categoria.
 
 ### `.issue-card`
-`<details>/<summary>` com header expansível. Variants `.critical` (border magenta) e `.medium` (border blue). Toggle visual de `+` rotaciona pra `×` quando aberto.
+`<details>/<summary>` com header expansível. Variants `.critical` (vermelho), `.medium` (laranja) e `.light` (verde). Toggle visual de `+` rotaciona pra `×` quando aberto.
 
 ### `.issue-body pre`
 Snippet de código com syntax highlight via spans:

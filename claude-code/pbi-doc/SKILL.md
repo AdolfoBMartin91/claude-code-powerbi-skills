@@ -105,6 +105,73 @@ Se não especificado, perguntar **uma vez**:
   - **Relacionamentos**: from, to, cardinalidade, direção, ativo
   - **Dependências**: medida X usa medida Y; medida Z usa coluna W
 
+#### Regras obrigatórias de parsing de medidas TMDL
+
+Ao ler medidas em `.tmdl`, parsear propriedades linha-a-linha. Nunca usar regex com `DOTALL`, `Singleline` ou equivalente para capturar propriedades simples como `displayFolder`, `formatString`, `description`, `lineageTag` ou `annotation`.
+
+Essas propriedades devem ser lidas apenas da própria linha onde aparecem. `displayFolder` deve conter somente o valor depois de `displayFolder:` na mesma linha.
+
+Correto:
+
+```tmdl
+displayFolder: 0. Geral
+```
+
+Resultado esperado:
+
+```text
+0. Geral
+```
+
+Errado:
+
+```text
+0. Geral
+lineageTag: 119ea07a-ab72-433f-a16a-77dc7d17605e
+annotation PBI_FormatHint = {"isGeneralNumber":true}
+```
+
+Use uma função de captura até fim de linha:
+
+```python
+import re
+
+def prop_line(block: str, key: str, default: str = "") -> str:
+    pattern = r"^\s*" + re.escape(key) + r":[ \t]*([^\r\n]+)"
+    match = re.search(pattern, block, re.MULTILINE)
+    return match.group(1).strip() if match else default
+
+folder = prop_line(measure_block, "displayFolder", "Sem pasta")
+format_string = prop_line(measure_block, "formatString", "")
+description = prop_line(measure_block, "description", "")
+```
+
+Não usar:
+
+```python
+re.search(r"displayFolder:\s+(.+)", block, re.DOTALL)
+```
+
+Campos proibidos em pastas de medidas, sidebar, nome de grupo no HTML, texto explicativo e `data-search`:
+
+```text
+lineageTag
+annotation
+annotation PBI_FormatHint
+PBI_FormatHint
+```
+
+Para o modelo "Relatório de Comissões", as pastas esperadas são:
+
+```text
+0. Geral
+1. FGA
+2. Ass. Administrativo
+3. Sucesso do Cliente
+```
+
+Qualquer pasta contendo `lineageTag` ou `annotation PBI_FormatHint` está errada e deve ser corrigida antes de gerar os arquivos.
+
 ### 2. Gerar 5 arquivos markdown
 
 Ler templates em `templates/` e preencher com dados reais. Salvar em `./_docs/` na raiz do projeto Power BI:
@@ -170,7 +237,12 @@ Ler templates em `templates/` e preencher com dados reais. Salvar em `./_docs/` 
    - ✅ Correto: `dependências`, `└─`, `→`, `Incomparáveis`
    - ❌ Errado (mojibake): `dependÃªncias`, `âââ`, `â`, `IncomparÃ¡veis`
    - ❌ Errado (entities desnecessárias): `depend&ecirc;ncias`
+   - ❌ Errado (`?` substituindo acento): `relat?rio`, `express?o`, `Refer?ncias`, `propor??o`, `divis?o`, `cl?nica`, `per?odo`, `varia??o`, `din?mico`, `premia??o`, `confirma??o`, `bonifica??o`, `aplic?vel`, `num?rica`, `intermedi?ria`, `expl?citos`, `fun??o`, `altera??o`, `? usada por`
    - **Sintoma de erro:** se algum acento aparece como sequência de 2-3 chars estranhos (`Ã£`, `â`, `Ã©`), o parser HTML pode quebrar e o resto da página renderiza como texto cru. Refaz garantindo UTF-8.
+
+   Palavras e labels que devem sair corretamente: `relatório`, `expressão`, `Referências`, `proporção`, `divisão`, `clínica`, `período`, `variação`, `dinâmico`, `premiação`, `confirmação`, `bonificação`, `aplicável`, `numérica`, `intermediária`, `explícitos`, `função`, `alteração`, `É usada por`.
+
+   Separadores obrigatórios: usar `·` e `—`, nunca `?`. Exemplo correto: `Tabela: Medidas · Format: General` e `É usada por —`.
 
 5. **SALVAR** em `./_docs/index.html` (modo Code) ou retornar como artifact (modo Web).
 
@@ -181,7 +253,113 @@ Ler templates em `templates/` e preencher com dados reais. Salvar em `./_docs/` 
    - Acentos como `Ã£` ou `â` → encoding quebrado, refaz com UTF-8 puro.
    - Texto solto sem quebras (SVG/tabela aparecendo como prosa) → encoding mojibake quebrou o parser HTML, refaz.
 
-### 4. Resumir no chat
+### 4. Validação final obrigatória
+
+Antes de responder ao usuário, validar `_docs/index.html` e os 5 markdowns.
+
+#### Pastas de medidas
+
+Depois de gerar `_docs/index.html` e `_docs/02-medidas.md`, validar que títulos de grupos e navegação de medidas não foram contaminados por metadados TMDL:
+
+```python
+assert "lineageTag" not in measure_group_titles
+assert "annotation PBI_FormatHint" not in measure_group_titles
+assert "lineageTag" not in nav_measure_folders
+assert "annotation PBI_FormatHint" not in nav_measure_folders
+```
+
+`lineageTag` e `annotation PBI_FormatHint` podem aparecer dentro de `<pre>` apenas se forem parte de source TMDL/M intencional. Nunca podem aparecer em título, navegação, grupo de medidas, texto explicativo ou `data-search`.
+
+#### Acentuação e `?` suspeito
+
+Procurar `?` nos arquivos gerados. Ignorar somente usos legítimos em Power Query M (`[Attributes]?[Hidden]?`), JavaScript (`cond ? a : b`), regex JavaScript (`(?:...)`) e URLs de fontes (`family=...`). Qualquer `?` em texto de medida, título, label, navegação, descrição, markdown ou HTML deve ser corrigido antes de finalizar.
+
+Script sugerido:
+
+```python
+from pathlib import Path
+
+docs = Path("PBIP/_docs")
+
+allowed_fragments = [
+    "[Attributes]?",
+    "?[Hidden]?",
+    " ? ",
+    "?:",
+    "(?:",
+    "family=",
+    "? ''",
+    "? '",
+    "decimals ?",
+]
+
+for path in docs.glob("*"):
+    if not path.is_file():
+        continue
+
+    text = path.read_text(encoding="utf-8")
+    suspicious = []
+
+    for index, char in enumerate(text):
+        if char != "?":
+            continue
+
+        context = text[max(0, index - 50): index + 50].replace("\n", " ")
+
+        if any(fragment in context for fragment in allowed_fragments):
+            continue
+
+        suspicious.append(context)
+
+    if suspicious:
+        print(f"\n{path.name}: {len(suspicious)} '?' suspeitos")
+        for item in suspicious[:20]:
+            print("  ", item)
+```
+
+Critério de aceite: `0 '?' suspeitos em textos gerados`.
+
+#### HTML final
+
+```python
+from pathlib import Path
+import re
+
+html = Path("PBIP/_docs/index.html").read_text(encoding="utf-8")
+html_without_pre = re.sub(r"<pre.*?</pre>", "", html, flags=re.S)
+
+assert "{{" not in html
+assert "pessoa_idstring" not in html
+assert "lineageTag" not in html_without_pre
+assert "annotation PBI_FormatHint" not in html_without_pre
+
+required = [
+    "gold-grid",
+    "section-orb",
+    "sidebar-logo",
+    "table-card",
+    "measure-mini",
+    "rel-svg",
+]
+
+for token in required:
+    assert token in html, token
+```
+
+#### Checklist final
+
+- [ ] `_docs/index.html` foi gerado.
+- [ ] Os 5 markdowns foram gerados.
+- [ ] Não há placeholders `{{...}}` nos arquivos finais.
+- [ ] As pastas de medidas não contêm `lineageTag`.
+- [ ] As pastas de medidas não contêm `annotation`.
+- [ ] As pastas de medidas refletem apenas `displayFolder`.
+- [ ] Não há `?` suspeito em texto gerado.
+- [ ] `É usada por` aparece corretamente.
+- [ ] `relatório`, `expressão`, `Referências`, `proporção`, `divisão` e `clínica` aparecem com acento.
+- [ ] O HTML mantém `gold-grid`, `section-orb`, `sidebar-logo`, `table-card`, `measure-mini` e `rel-svg`.
+
+### 5. Resumir no chat
 
 Mensagem curta:
 - Quantidade do que foi documentado (5 tabelas, 19 medidas, 4 relacionamentos)
@@ -234,6 +412,28 @@ Exemplos de **bom** vs **ruim**:
 - Não modifica nada em `.SemanticModel/` ou `.Report/` — somente leitura
 - Não commita nada (segue regra git inviolável CLAUDE.md)
 - Operação 100% local — zero rede, zero XMLA
+- Se gerar arquivos por script, escrever sempre com UTF-8 explícito e newline consistente:
+
+```python
+Path("arquivo.md").write_text(conteudo, encoding="utf-8", newline="\n")
+Path("index.html").write_text(conteudo, encoding="utf-8", newline="\n")
+```
+
+Evitar depender da codepage do PowerShell para textos acentuados. Quando houver risco, usar escapes Unicode nas strings críticas (`\u00e3`, `\u00e7`, `\u00e9`, `\u00ed`, `\u00f3`, `\u00ea`, `\u00c9`, `\u00b7`, `\u2014`).
+
+## Recomendação forte: script determinístico
+
+Quando estabilizar a geração, mover a lógica para `pbi-doc/scripts/generate_docs.py` e instruir a skill a rodar esse script em vez de reimplementar parser TMDL manualmente a cada execução.
+
+Esse script deve concentrar:
+- parsing de TMDL
+- extração de medidas
+- extração segura de `displayFolder`
+- geração dos 5 markdowns
+- geração do HTML
+- validação de placeholders
+- validação de acentuação
+- validação de pastas de medidas
 
 ## Branding
 

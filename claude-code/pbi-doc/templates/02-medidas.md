@@ -7,6 +7,9 @@
     {{MEASURE_GROUPS_MD}} — Blocos markdown agrupados por displayFolder (ver padrão abaixo)
 
   ESTRUTURA: agrupar por displayFolder do TMDL. Sem folder vai em "Sem pasta".
+  displayFolder deve ser capturado somente da propria linha "displayFolder:".
+  Nunca usar regex DOTALL/Singleline para displayFolder, formatString ou description.
+  Pastas de medidas nunca podem conter: lineageTag, annotation, annotation PBI_FormatHint, PBI_FormatHint.
 
   Padrão de cada GRUPO:
 
