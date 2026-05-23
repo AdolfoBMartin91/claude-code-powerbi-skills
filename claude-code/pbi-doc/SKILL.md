@@ -121,7 +121,35 @@ Ler templates em `templates/` e preencher com dados reais. Salvar em `./_docs/` 
 
 **🚨 REGRA INVIOLÁVEL — usar templates/relatorio.html LITERAL:**
 
-1. **LER** `templates/relatorio.html` — esse arquivo já tem **todo o CSS, todo o HTML estrutural, todos os tokens DS v4 (Bebas Neue, accent-gold, gold-grid + beams animados, orb-v2 elipses blue/purple, riscas section+section::before, brackets), todo o JS de scroll spy/busca**. CSS são ~600 linhas inline + HTML completo com gold-grid, sidebar, topbar, sections.
+1. **LER** `templates/relatorio.html` — esse arquivo já tem **todo o CSS, todo o HTML estrutural, todos os tokens DS v4 (Fathead/Bebas Neue, Montserrat, Barlow Condensed, JetBrains Mono, accent-gold, gold-grid + beams animados, orb-v2 elipses blue/purple, riscas section+section::before, brackets), todo o JS de scroll spy/busca**. CSS são ~600 linhas inline + HTML completo com gold-grid, sidebar, topbar, sections.
+
+   **Tipografia obrigatória do HTML:**
+
+   ```css
+   --font-display: 'Fathead', 'Bebas Neue', sans-serif;
+   --font-condensed: 'Barlow Condensed', sans-serif;
+   --font-body: 'Montserrat', sans-serif;
+   --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+   ```
+
+   Tamanhos base:
+
+   | Elemento | Fonte | Tamanho |
+   |---|---|---|
+   | Body | `Montserrat` | `16px` |
+   | Topbar meta / project name | `Montserrat` | `12px` |
+   | Hero eyebrow | `Barlow Condensed` | `13px` |
+   | Hero headline | `Fathead / Bebas Neue` | `clamp(22px, 5vw, 26px)` |
+   | Hero subline | `Barlow Condensed` | `clamp(16px, 2vw, 22px)` |
+   | Section label | `Barlow Condensed` | `11px` |
+   | Section title | `Fathead / Bebas Neue` | `clamp(22px, 4vw, 24px)` |
+   | Section description | `Montserrat` | `16px` |
+   | Nome de tabela | `Montserrat` | `13px` a `15px` |
+   | Bloco de código | `JetBrains Mono / Consolas` | `13px` |
+   | Footer CTA | `Barlow Condensed` | `12px` |
+   | Footer meta | `Barlow Condensed` | `10px` |
+
+   **Nomes de tabela usam sempre Montserrat** (`var(--font-body)`), inclusive `.table-card-name`, `.inv-table tbody td.tab-name` e links de navegação de tabelas. Não usar JetBrains Mono para nomes de tabela; mono fica reservado para DAX, paths, tipos técnicos e código.
 
 2. **SUBSTITUIR APENAS os placeholders `{{...}}`** pelos valores reais derivados dos `.tmdl`. Lista completa dos placeholders está em `references/escopo.md` desta skill (seção "Placeholders do `templates/relatorio.html`"). Todos os blocos `{{...}}_HTML` são gerados pelo Claude com base no inventário do modelo.
 
@@ -132,7 +160,7 @@ Ler templates em `templates/` e preencher com dados reais. Salvar em `./_docs/` 
 3. **PROIBIDO:**
    - ❌ Trocar o CSS por outro
    - ❌ Inventar nova paleta de cores (usar SÓ os tokens do template: `--accent-gold-bright #E8C9A0`, `--accent-glow #7099FF`, `--neon-magenta #C47FFF`, etc.)
-   - ❌ Mudar fontes (DS v4 usa Bebas Neue + Barlow Condensed + Outfit + JetBrains Mono — nada de Segoe UI, Arial, system-ui)
+   - ❌ Mudar fontes (DS v4 usa Fathead/Bebas Neue + Barlow Condensed + Montserrat + JetBrains Mono — nada de Segoe UI, Arial, system-ui; nomes de tabela ficam em Montserrat)
    - ❌ Remover o `<div class="gold-grid">`, os `<div class="section-orb">`, ou qualquer ornamento decorativo do template
    - ❌ Gerar HTML "do zero" porque parece mais fácil — **isso queima toda a identidade visual Xperiun**
    - ❌ **Tocar em qualquer coisa dentro de comentários `<!-- ... -->`** — comentários são instruções pra você, não conteúdo a substituir. Mantém como tá.

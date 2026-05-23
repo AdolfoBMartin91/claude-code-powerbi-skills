@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Corrigido
+
+- `pbi-modelo-review`: troca regras de branding do HTML para DWAY na topbar e no footer, com checklist obrigatório contra resquícios Xperiun.
+- `pbi-doc`: atualiza tipografia do HTML para Fathead/Bebas Neue, Montserrat, Barlow Condensed e JetBrains Mono; nomes de tabela agora usam Montserrat.
+
 ## 2026-04-29
 
 - Sync de `pbi-doc`, `pbi-modelo-review`, `pbi-dax-create` com a versão local do xperiun-os.

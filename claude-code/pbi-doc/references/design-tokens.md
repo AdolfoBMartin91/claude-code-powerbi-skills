@@ -9,7 +9,7 @@ Mesmo conjunto de tokens da `/pbi-modelo-review` — vibe DWAY v1 unificada nas 
 ## Princípios visuais aplicados nesta skill
 
 - **Vibe**: editorial premium · "manual técnico de luxo" tipo Linear docs / Stripe docs / Tailwind docs
-- **Hierarquia**: tipografia condensada (Bebas Neue + Barlow Condensed) pra display, Outfit pra body, JetBrains Mono pra código
+- **Hierarquia**: tipografia editorial (`Fathead`/Bebas Neue + Barlow Condensed) pra display, Montserrat pra body e nomes de tabela, JetBrains Mono pra código
 - **Cor primária**: blue glow (`--accent-glow: #7099FF`) pra elementos navegacionais e identificadores (paths, nomes de medidas)
 - **Cor de destaque**: gold/champagne (`--accent-gold-bright: #E8C9A0`) pra valores numéricos e métricas-resumo
 - **Tipo de tabela** (badge na sidebar e nos cards):
@@ -83,28 +83,37 @@ Mesmo conjunto de tokens da `/pbi-modelo-review` — vibe DWAY v1 unificada nas 
 ## Tipografia
 
 ```css
---font-display:   'Bebas Neue', sans-serif;
+--font-display:   'Fathead', 'Bebas Neue', sans-serif;
 --font-condensed: 'Barlow Condensed', sans-serif;
---font-body:      'Outfit', sans-serif;
---font-mono:      'JetBrains Mono', Consolas, monospace;
+--font-body:      'Montserrat', sans-serif;
+--font-mono:      'JetBrains Mono', 'Consolas', monospace;
 ```
 
 ### Carregamento (Google Fonts)
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 ```
 
 ### Escala
-- `hero-title`: `clamp(20px, 3vw, 26px)`
-- `section-title`: `clamp(18px, 2.4vw, 24px)`
+- `body`: `16px`, Montserrat
+- `topbar .meta` / `.project-name`: `12px`, Montserrat
+- `hero-eyebrow`: `13px`, Barlow Condensed
+- `hero-title`: `clamp(22px, 5vw, 26px)`, Fathead/Bebas Neue
+- `hero-sub`: `clamp(16px, 2vw, 22px)`, Barlow Condensed
+- `section-title`: `clamp(22px, 4vw, 24px)`, Fathead/Bebas Neue
+- `section-desc`: `16px`, Montserrat
 - `table-card-name`: `15px` fixo, Montserrat
+- `inv-table tbody td.tab-name`: `13px`, Montserrat
 - `measure-group-title`: `18px` fixo
 - `measure-name` / `details.measure-mini summary .name`: `14px` fixo
 - `code` (DAX/path): `13px` mono
-- body padrão: `15px`
 - sidebar nav: `13px`
+
+### Regra obrigatória para nomes de tabela
+
+Nomes de tabela no HTML (`.table-card-name`, `.inv-table tbody td.tab-name` e links de navegação de tabelas) usam sempre Montserrat (`var(--font-body)`). Não usar JetBrains Mono para nomes de tabela; mono fica reservado para DAX, paths, tipos técnicos e código.
 
 ---
 

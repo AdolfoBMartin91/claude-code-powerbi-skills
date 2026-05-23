@@ -222,14 +222,163 @@ Exemplos de **bom** vs **ruim**:
 
 ✅ Bom: "Bi-direcional em N:1 com calendário causa ambiguidade de filtro e duplica scan no engine. Em modelo de 1.4GB você está pagando ~30% de overhead por refresh sem ganhar nada."
 
-## Branding (footer e CTA do HTML)
+## Regras obrigatórias · Branding DWAY no Review HTML
 
-O relatório HTML tem footer fixo:
-- Linha: "Relatório gerado em 4 minutos por Claude Code + /pbi-modelo-review"
-- CTA: "Quero usar esse skill no meu Power BI →" (link placeholder por enquanto)
-- Meta: "XPERIUN · O Sistema Operacional dos Incomparáveis · pages.xperiun.com"
+### 1. Topbar deve usar logo da DWAY
 
-Branding é **sempre** Xperiun (não @leokarpa) — a skill faz parte do posicionamento institucional. Mesmo se o usuário rodar a skill no projeto dele, o footer mantém referência Xperiun (é nossa skill, ele só tá usando).
+No HTML do review, a topbar não deve exibir texto como:
+
+```html
+<span>XPERIUN · CLAUDE CODE</span>
+```
+
+Isso deve ser substituído pelo logo oficial da DWAY, igual ao usado no `pbi-doc`.
+
+#### Forma correta
+
+```html
+<div class="brand">
+  <img
+    src="https://dway.com.br/lovable-uploads/162f8b14-d0ac-4523-a8c3-160e570de125.png"
+    alt="DWAY"
+    class="topbar-logo"
+  >
+</div>
+```
+
+Adicionar o CSS:
+
+```css
+.topbar-logo {
+  display: block;
+  max-height: 42px;
+  width: auto;
+}
+```
+
+#### Forma proibida
+
+```html
+<div class="brand">
+  <span class="dot"></span>
+  <span>XPERIUN · CLAUDE CODE</span>
+</div>
+```
+
+---
+
+### 2. Footer deve seguir o CTA da DWAY
+
+O rodapé do review deve seguir este padrão visual:
+
+- Botão central arredondado
+- Texto: `QUERO CONHECER A DWAY →`
+- Link: `https://dway.com.br`
+- Linha inferior: `DWAY · DATA WRANGLING AND ANALYSIS FOR YOU · DWAY.COM.BR`
+
+#### HTML correto
+
+```html
+<div class="footer">
+  <div class="footer-divider"></div>
+  <p class="footer-text">
+    Esse relatório foi gerado em menos de 1 minuto por
+    <strong>Claude Code</strong> + <span class="gold">/pbi-modelo-review</span>.
+  </p>
+  <a href="https://dway.com.br" class="footer-cta">Quero conhecer a DWAY →</a>
+  <p class="footer-meta">DWAY · Data Wrangling and Analysis for You · dway.com.br</p>
+</div>
+```
+
+A `.footer-text` pode existir no HTML, mas deve ficar oculta no layout final.
+
+#### CSS correto
+
+```css
+.footer {
+  margin-top: 96px;
+  padding-top: 34px;
+  border-top: 0;
+  text-align: center;
+}
+
+.footer-divider {
+  display: none;
+}
+
+.footer-text {
+  display: none;
+}
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 232px;
+  min-height: 44px;
+  padding: 0 30px;
+  background: rgba(104,184,236,0.10);
+  border: 1px solid rgba(104,184,236,0.38);
+  border-radius: 999px;
+  font-family: var(--font-condensed);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #68B8EC;
+  text-decoration: none;
+  transition: all 0.3s;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.footer-cta:hover {
+  background: rgba(104,184,236,0.18);
+  border-color: #68B8EC;
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 28px rgba(104,184,236,0.22),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.footer-meta {
+  font-family: var(--font-condensed);
+  font-size: 10px;
+  color: rgba(166,183,214,0.58);
+  margin-top: 26px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+```
+
+#### Forma proibida
+
+Não usar footer Xperiun no review DWAY:
+
+```html
+<a href="https://pages.xperiun.com" class="footer-cta">
+  Quero usar esse skill no meu Power BI →
+</a>
+
+<p class="footer-meta">
+  XPERIUN · O Sistema Operacional dos Incomparáveis · pages.xperiun.com
+</p>
+```
+
+---
+
+### 3. Checklist final obrigatório
+
+Antes de finalizar o `index.html`, verificar:
+
+```md
+- [ ] Não existe `XPERIUN · CLAUDE CODE` na topbar
+- [ ] A topbar usa `<img ... class="topbar-logo">`
+- [ ] O CTA do footer aponta para `https://dway.com.br`
+- [ ] O texto do CTA é `Quero conhecer a DWAY →`
+- [ ] O footer-meta é `DWAY · Data Wrangling and Analysis for You · dway.com.br`
+- [ ] Não existe `pages.xperiun.com` no footer
+```
 
 ## Tempo típico
 

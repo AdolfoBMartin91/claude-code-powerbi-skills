@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -28,7 +28,7 @@
   --gradient-orb:radial-gradient(ellipse at 38% 52%, #28345A 0%, #232E56 12%, #1B264E 28%, #161E42 48%, #141832 70%);
   --gradient-gold:linear-gradient(135deg, #5238B1 0%, #68B8EC 100%);
   --gradient-surface:linear-gradient(135deg, #1B1F3F 0%, #161A32 100%);
-  --font-display:'Bebas Neue', sans-serif;
+  --font-display:'Fathead', 'Bebas Neue', sans-serif;
   --font-condensed:'Barlow Condensed', sans-serif;
   --font-body:'Montserrat', sans-serif;
   --font-mono:'JetBrains Mono', 'Consolas', monospace;
@@ -41,7 +41,7 @@ body {
   background: var(--bg-deepest);
   color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -59,7 +59,7 @@ body::before {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 28px; z-index: 90;
 }
-.project-name { font-family: var(--font-body); font-size: 14px; color: var(--text-secondary); }
+.project-name, .topbar .meta { font-family: var(--font-body); font-size: 12px; color: var(--text-secondary); }
 .project-name strong { color: var(--text-white); font-weight: 600; }
 
 .search-wrap { position: relative; }
@@ -157,16 +157,16 @@ section {
   margin: 64px 0;
 }
 .section-eyebrow { font-family: var(--font-condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
-.section-title { font-family: var(--font-display); font-size: clamp(18px, 2.4vw, 24px); line-height: 1.1; letter-spacing: 0.04em; color: var(--text-white); margin-bottom: 14px; text-transform: uppercase; }
+.section-title { font-family: var(--font-display); font-size: clamp(22px, 4vw, 24px); line-height: 1.1; letter-spacing: 0.04em; color: var(--text-white); margin-bottom: 14px; text-transform: uppercase; }
 .section-title .gold { background:var(--gradient-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .section-desc { font-family: var(--font-body); font-size: 16px; color: var(--text-secondary); line-height: 1.7; max-width: 64ch; margin-bottom: 36px; }
 .section-desc strong { color: var(--text-white); font-weight: 600; }
 
 /* ── Hero ── */
 .hero-block { padding: 36px 0 0; }
-.hero-eyebrow { font-family: var(--font-condensed); font-size: 12px; font-weight: 300; letter-spacing: 0.5em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 18px; }
-.hero-title { font-family: var(--font-display); font-size: clamp(20px, 3vw, 26px); font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-white); line-height: 1.1; margin-bottom: 8px; word-break: break-word; }
-.hero-sub { font-family: var(--font-condensed); font-size: clamp(14px, 1.6vw, 18px); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background:var(--gradient-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom: 28px; }
+.hero-eyebrow { font-family: var(--font-condensed); font-size: 13px; font-weight: 300; letter-spacing: 0.5em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 18px; }
+.hero-title { font-family: var(--font-display); font-size: clamp(22px, 5vw, 26px); font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-white); line-height: 1.1; margin-bottom: 8px; word-break: break-word; }
+.hero-sub { font-family: var(--font-condensed); font-size: clamp(16px, 2vw, 22px); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background:var(--gradient-gold); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom: 28px; }
 .hero-tagline { font-family: var(--font-body); font-style: italic; font-size: 17px; color: var(--text-secondary); max-width: 60ch; line-height: 1.6; }
 
 /* ── Metric row ── */
@@ -181,7 +181,7 @@ section {
 .inv-table thead th { padding: 12px 14px; text-align: left; font-family: var(--font-condensed); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-mid); }
 .inv-table tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border-faint); color: var(--text-primary); }
 .inv-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
-.inv-table tbody td.tab-name { font-family: var(--font-mono); font-size: 13px; color: var(--accent-glow); font-weight: 500; }
+.inv-table tbody td.tab-name { font-family: var(--font-body); font-size: 13px; color: var(--accent-glow); font-weight: 600; }
 .inv-table tbody td.right { text-align: right; font-family: var(--font-condensed); font-weight: 600; color: var(--accent-gold-bright); }
 
 .badge-inline {
@@ -217,7 +217,7 @@ section {
   padding: 20px 24px; border-bottom: 1px solid var(--border-faint);
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
 }
-.table-card-name { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 600; color: var(--accent-glow); }
+.table-card-name { font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--accent-glow); }
 .table-card-meta { font-family: var(--font-body); font-size: 13px; color: var(--text-muted); }
 .table-card-body { padding: 20px 24px; }
 .table-card-body p { margin-bottom: 14px; color: var(--text-primary); font-size: 14px; line-height: 1.65; }
